@@ -1,7 +1,7 @@
 #coding:utf-8
 
 # Tube model check:
-# draw white noise input frequency response using FFT analysis.
+# Comparison computed frequency response to white noise input frequency response using FFT analysis.
 #
 
 import os
@@ -28,9 +28,8 @@ class Class_Tube_Check(object):
         self.resolution=1
         self.f_list=np.linspace(self.freq_low, self.freq_high,int((self.freq_high - self.freq_low)/self.resolution + 1 ) )
         #
-        if 0:
-            self.H1_linear()
-            self.get_peaks()
+        self.H1_linear()
+        self.get_peaks()
         #
         self.make_white_noise(sinpuku=0.01, length=1)
         self.yout=self.tube.process(self.xin)
@@ -57,14 +56,14 @@ class Class_Tube_Check(object):
         # draw
         fig = plt.figure()
         
-        #plt.plot(self.freq, self.amp1,'r')
-        #plt.plot(self.freq[self.peaks], self.amp1[self.peaks], "x")
+        plt.plot(self.freq, self.amp1,'r')
+        plt.plot(self.freq[self.peaks], self.amp1[self.peaks], "x")
         
         if 1:
             id0=np.where( self.y_freq > self.f_list[0])[0][0]
             id1=np.where( self.y_freq > self.f_list[-1])[0][0]
             plt.plot(self.y_freq[id0:id1], self.yf[id0:id1],'b')
-            plt.title('frequency response ' + str(self.tube.num_of_tube) + ' : blue white noise input')
+            plt.title('frequency response ' + str(self.tube.num_of_tube) + ' : red computed vs blue white noise input')
         else:
             plt.title('frequency response')
         
@@ -82,7 +81,7 @@ class Class_Tube_Check(object):
         self.yf= np.log10(np.abs(np.fft.fft( x *  signal.hann(N_sample)))) * 20  # unit dB
         self.y_freq= np.fft.fftfreq(N_sample,1 / self.sr)
         
-    def make_white_noise(self, sinpuku=0.05, length=0.5):
+    def make_white_noise(self, sinpuku=0.05, length=1):
         self.xin=np.random.randn(self.sr * length ) * sinpuku
         
     def save_wav(self, yout, wav_path, wav_dir='wav_white_noise_in_out'):

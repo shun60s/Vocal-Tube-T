@@ -42,14 +42,47 @@ class Class_T_ThreeTube(object):
         self.num_of_tube=3
         
     def fone(self, xw):
-        pass
+        # calculate one point of frequecny response
+        yi= 0.5 * ( 1.0 + self.rg0 ) * ( 1.0 + self.r21)  * ( 1.0 + self.rl0 ) * np.exp( -1.0j * ( self.tu1 + self.tu2 ) * xw) 
+        yb1= 1.0 + self.r12 * self.rg0 *  np.exp( -2.0j * self.tu1 * xw ) 
+        yb1= yb1 + self.r21  * self.rl0 *  np.exp( -2.0j * self.tu2 * xw ) 
+        yb1= yb1 + self.rg0 * self.rl0 * (1.0 - self.r12 + self.r21) * np.exp( -2.0j * ( self.tu1 + self.tu2 ) * xw)
+        yc1= self.rl3  * ( 1.0 + self.r31)
+        yc1= yc1 * (1.0 + self.rg0 *  np.exp( -2.0j * self.tu1 * xw ))
+        yc1= yc1 * (1.0 - self.rl0 * np.exp( -2.0j * self.tu2 * xw ))
+        yc1= yc1 * np.exp( -2.0j *  self.tu3 * xw) #np.exp( -1.0j *  self.tu3 * xw)
+        yd1= 1.0 - self.rl3 * np.exp( -2.0j * self.tu3 * xw ) 
+        """
+        if yd1 == 0.0:
+            val=0.  # because yc/yd is infinity when yd = 0
+        else:
+            yc1= yc1 / yd1
+            val= yi / ( yb1 + yc1)
+        """
+        yc1= yc1 / yd1
+        val= yi / ( yb1 + yc1)
+        return np.sqrt(val.real ** 2 + val.imag ** 2)
         
     def H0(self, freq_low=100, freq_high=5000, Band_num=256):
-        pass
+        # get Log scale frequecny response, from freq_low to freq_high, Band_num points
+        amp=[]
+        freq=[]
+        bands= np.zeros(Band_num+1)
+        fcl=freq_low * 1.0    # convert to float
+        fch=freq_high * 1.0   # convert to float
+        delta1=np.power(fch/fcl, 1.0 / (Band_num)) # Log Scale
+        bands[0]=fcl
+        #print ("i,band = 0", bands[0])
+        for i in range(1, Band_num+1):
+            bands[i]= bands[i-1] * delta1
+            #print ("i,band =", i, bands[i]) 
+        for f in bands:
+            amp.append(self.fone(f * 2.0 * np.pi))
+        return   np.log10(amp) * 20, bands # = amp value, freq list
         
     def process(self, yg ):
         # process reflection transmission of resonance tube: yg is input, y2tm is output
-        # three way junction of tube1, tube2, and tube3
+        # three T tube
         #
         #
         #             ------------------------------------------------
@@ -101,7 +134,7 @@ class Class_T_ThreeTube(object):
             yb2[0]=  -1. * self.rl0  * yb1[-1]
             y2tm[tc0]= (1 + self.rl0) * yb1[-1]
             
-            #  tube 3 edge is almost closed, rl3 is near -1
+            #  tube 3 closed
             yc1[0]= ( 1. + self.r31 ) * ya1[-1] + self.r31 * yc2[-1] + ( 1. + self.r31 ) * yb2[-1]
             yc2[0]=  -1. * self.rl3  * yc1[-1]
             
