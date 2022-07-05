@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vocal Tube T   </title>
+<meta name="description" content="This is an experiment of 3-way junction model, T Three Tube Mode." />
+<link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-lg px-3 my-5 markdown-body">
+<h1>Vocal Tube T   </h1>
+
+<p>This is an experiment of 3-way junction model, T Three Tube Mode.<br /></p>
+
+
+<h2>contents    </h2>
+
+<p>T_three_tube.py and oneloop_four_tube.py is a definition of the tube model.<br /></p>
+
+<p>Example: T Three Tube Mode<br />
+comparison computed frequency response to white noise input frequency response using FFT analysis.<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python tube_check_T.py
+</code></pre></div></div>
+
+<p><img src="sample_T.png" alt="figure1" > <br />
+A3=0 (simple two tube)<br />
+<img src="sample_T_when_A3_is_0.png" alt="figure2" > <br /></p>
+
+
+<p>Example: one-loop Four Tube Model<br />
+draw white noise input frequency response using FFT analysis.<br /></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+python tube_check_1loop.py
+</code></pre></div></div>
+<p>attenuation constant per one step in tube2 and tube3 is 0.998.<br />
+<img src="oneloop_att_loop_is_0_998.png" alt="figure3" > <br />
+attenuation constant per one step in tube2 and tube33 is 1.0.<br />
+<img src="oneloop_att_loop_is_1.png" alt="figure4" > <br /></p>
+</div>
+</body>
+</html>
