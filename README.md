@@ -27,3 +27,6 @@ attenuation constant per one step in tube2 and tube3 is 0.998.
 ![figure3](docs/oneloop_att_loop_is_0_998.png)   
 attenuation constant per one step in tube2 and tube33 is 1.0.  
 ![figure4](docs/oneloop_att_loop_is_1.png)   
+
+## License    
+MIT  
